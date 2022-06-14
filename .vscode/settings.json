@@ -1,0 +1,11 @@
+{
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "python.formatting.provider": "black",
+    "python.formatting.yapfPath": "blackPath",
+    "editor.formatOnSave": true,
+    "files.autoSave": "onFocusChange",
+    "editor.codeActionsOnSave": {
+        "editor.formatOnSave": true
+    }
+}
