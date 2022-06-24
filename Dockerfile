@@ -1,5 +1,6 @@
 FROM python:3.9
 
+USER root
 RUN apt-get update && apt-get install
 
 WORKDIR /app
@@ -11,4 +12,6 @@ ADD . .
 
 WORKDIR /app/jumiascraper
 
-CMD python run.py
+ENV PATH="/app/.local/bin/:${PATH}"
+
+# CMD ["python", "run.py"]
