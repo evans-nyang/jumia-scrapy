@@ -92,7 +92,7 @@ DOWNLOAD_DELAY = 2
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 FEEDS = {
-    "s3://myscrapy-test-bucket/%(name)s/%(time)s.json": {
+    f"{os.environ['S3']}/%(name)s/%(time)s.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False
