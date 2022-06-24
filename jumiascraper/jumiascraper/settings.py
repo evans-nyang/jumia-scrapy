@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 # Scrapy settings for jumiascraper project
 #
 # For simplicity, this file contains only settings considered important or
@@ -64,6 +67,7 @@ DOWNLOAD_DELAY = 2
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
 #    'jumiascraper.pipelines.JumiascraperPipeline': 300,
+#    'scrapy.pipelines.files.S3FilesStore': 1
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -86,3 +90,14 @@ DOWNLOAD_DELAY = 2
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+FEEDS = {
+    "s3://myscrapy-test-bucket/%(name)s/%(time)s.json": {
+        "format": "json",
+        "encoding": "utf8",
+        "store_empty": False
+    }
+}
+
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY= os.environ["AWS_SECRET_ACCESS_KEY"]

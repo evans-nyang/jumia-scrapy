@@ -7,11 +7,11 @@ class JamSpider(scrapy.Spider):
     name = "jam"
     start_urls = ["http://jumia.co.ke/mobile-phones//"]
     # store scraped items to a json file in dataset directory
-    custom_settings = {"FEED_FORMAT": "json", "FEED_URI": "../dataset/phones.json"}
+    # custom_settings = {"FEED_FORMAT": "json", "FEED_URI": "../dataset/phones.json"}
 
     def parse(self, response):
         try:
-            print("\nTrying to fetch our articles   ")
+            print("\nTrying to fetch our articles...")
             articles = response.xpath("/html/body/div[1]/main/div[2]/div[3]/section/div[1]/article[@class='prd _fb col c-prd']")
             newdata = {}
             for i, art in enumerate(articles):
