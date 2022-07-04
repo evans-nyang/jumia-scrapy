@@ -29,11 +29,11 @@ class JumiascraperPipeline:
             raise err
 
     def process_item(self, item, spider):
-        information = Items()
+        inform = Items()
         session = self.Session()
         try:
             print("Adding items to database")
-            session.add(information)
+            session.add(inform)
             session.commit()
 
         except:

@@ -12,8 +12,8 @@ class JamSpider(scrapy.Spider):
     # custom_settings = {"FEED_FORMAT": "json", "FEED_URI": "../dataset/phones.json"}
 
     def parse(self, response):
+        items = JumiascraperItem()
         try:
-            items = JumiascraperItem()
             print("\nTrying to fetch our articles...")
             articles = response.xpath("/html/body/div[1]/main/div[2]/div[3]/section/div[1]/article[@class='prd _fb col c-prd']")
             newdata = {}

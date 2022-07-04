@@ -1,15 +1,11 @@
 import os
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.engine.base import Engine
-# from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import JSONB
 from scrapy.utils.project import get_project_settings
 
-# from . import settings
-
 DeclarativeBase = declarative_base()
-
 
 def db_connect() -> Engine:
     """
