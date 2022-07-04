@@ -1,5 +1,7 @@
 import datetime
 
+from ..items import JumiascraperItem
+
 import scrapy
 
 
@@ -11,12 +13,14 @@ class JamSpider(scrapy.Spider):
 
     def parse(self, response):
         try:
+            items = JumiascraperItem()
             print("\nTrying to fetch our articles...")
             articles = response.xpath("/html/body/div[1]/main/div[2]/div[3]/section/div[1]/article[@class='prd _fb col c-prd']")
             newdata = {}
             for i, art in enumerate(articles):
                 if i < 250:
                     newdata.update({i: self.parse_result(art)})
+            items["inform"] = newdata
             yield newdata
 
         except Exception as err:

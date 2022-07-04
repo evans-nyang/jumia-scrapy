@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install
 
 WORKDIR /app
 
+RUN pip install --upgrade pip
+
 COPY requirements.txt .
 RUN pip install --no-cache -r requirements.txt
 
@@ -14,4 +16,4 @@ WORKDIR /app/jumiascraper
 
 ENV PATH="/app/.local/bin/:${PATH}"
 
-# CMD ["python", "run.py"]
+# ENTRYPOINT ["python", "run.py"]

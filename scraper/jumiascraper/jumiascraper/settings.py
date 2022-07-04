@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 # Scrapy settings for jumiascraper project
 #
@@ -65,10 +64,10 @@ DOWNLOAD_DELAY = 2
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'jumiascraper.pipelines.JumiascraperPipeline': 300,
+ITEM_PIPELINES = {
+   'jumiascraper.pipelines.JumiascraperPipeline': 300,
 #    'scrapy.pipelines.files.S3FilesStore': 1
-# }
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -91,13 +90,22 @@ DOWNLOAD_DELAY = 2
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+s3 = os.environ["S3"]
+drivername = "postgresql"
+user = os.environ["USER"]
+passwd = os.environ["PASSWORD"]
+host = os.environ["LOCALHOST"]
+port = int(os.environ["PORT"])
+db_name = os.environ["DB"]
+
 FEEDS = {
-    f"{os.environ['S3']}/%(name)s/%(time)s.json": {
+    f"{s3}/%(name)s/%(time)s.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False
     }
 }
 
-AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
-AWS_SECRET_ACCESS_KEY= os.environ["AWS_SECRET_ACCESS_KEY"]
+DATABASE_STRING = f"{drivername}://{user}:{passwd}@{host}:{port}/{db_name}"

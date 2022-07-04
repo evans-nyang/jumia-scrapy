@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  phonesdatabase:
+    container_name: phonesdatabase
+    image: postgres:latest
+    env_file:
+      - ".env"
+    volumes:
+      - "${PGDATABASE_VOL}:/var/lib/postgresql/data:rw"
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    networks:
+      - phonesjumia
+    ports:
+      - ${PORT}:${PORT}
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    env_file:
+      - ".env"
+    networks:
+      - phonesjumia
+    ports:
+      - ${HOSTPORT}:${LOCALPORT}
+
+networks:
+  phonesjumia:
+    name: phonesjumia
+    external: true
