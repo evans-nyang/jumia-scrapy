@@ -4,7 +4,7 @@ services:
     container_name: phonesdatabase
     image: postgres:latest
     env_file:
-      - ".env"
+      - .env
     volumes:
       - "${PGDATABASE_VOL}:/var/lib/postgresql/data:rw"
     logging:
@@ -20,7 +20,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     env_file:
-      - ".env"
+      - .env
     networks:
       - phonesjumia
     ports:

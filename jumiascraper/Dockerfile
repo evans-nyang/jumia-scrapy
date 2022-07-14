@@ -12,7 +12,7 @@ RUN pip install --no-cache -r requirements.txt
 
 ADD . .
 
-WORKDIR /app/jumiascraper
+# WORKDIR /app/jumiascraper
 
 ENV PATH="/app/.local/bin/:${PATH}"
 

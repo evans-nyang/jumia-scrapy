@@ -1,5 +1,3 @@
-vscode settings
-.vscode
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -111,6 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+*venv
 
 # Spyder project settings
 .spyderproject
@@ -138,8 +137,12 @@ data
 
 # terraform variables
 variables.tf
-*.terraform
+*.terraform*
 *terraform.tfstate*
 
 # any . files
 *._*
+
+# my files
+impreq.py
+justafile
