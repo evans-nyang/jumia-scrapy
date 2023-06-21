@@ -149,3 +149,4 @@ variables.tf
 impreq.py
 justafile
 *.dbt*
+airflow/*
