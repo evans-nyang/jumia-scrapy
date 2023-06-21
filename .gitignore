@@ -134,6 +134,8 @@ dmypy.json
 
 # postgres data folder
 data
+*pgdata
+*pglogs
 
 # terraform variables
 variables.tf
@@ -146,3 +148,4 @@ variables.tf
 # my files
 impreq.py
 justafile
+*.dbt*
