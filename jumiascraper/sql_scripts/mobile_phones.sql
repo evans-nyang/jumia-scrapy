@@ -5,7 +5,7 @@ CREATE TABLE mobile_phones (
     item_url TEXT,
     data_id VARCHAR(20) PRIMARY KEY,
     brand VARCHAR(50),
-    specs VARCHAR(200),
+    specs TEXT,
     price DECIMAL(10, 2),
     old_price DECIMAL(10, 2),
     discount DECIMAL(5, 2),
