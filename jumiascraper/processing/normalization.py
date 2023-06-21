@@ -51,8 +51,9 @@ def normalize_official_store(official_store):
     # Convert the value to True if 'Official Store', else False
     return official_store == 'Official Store'
 
+normalized_data = []
+
 def normalize_dataset(dataset):
-    normalized_data = []
     for key, value in dataset.items():
         normalized_item = {
             'crawled_at': value['crawled_at'],

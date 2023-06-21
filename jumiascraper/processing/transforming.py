@@ -1,36 +1,29 @@
 import os
-import json
 import psycopg2
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 from normalization import normalize_dataset
+from load_dataset import load_dataset_from_json
 
 # Load environment variables from .env file
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(dotenv_path)
 
-def load_dataset_from_json(file_path):
-    with open(file_path, 'r') as file:
-        dataset = json.load(file)
-    return dataset
+
 
 # Dataset file is named 'dataset.json' and located in the 'data' directory
 file_path = '../dataset/phones.json'
 
 # Load the dataset from the JSON file
 dataset = load_dataset_from_json(file_path)
-# print(dataset)
+print(len(dataset))
 
-        
-# Normalize the dataset
-# normalized_dataset = normalize_dataset(value)
+i = 0
+while i < len(dataset):
+    normalized_dataset = normalize_dataset(dataset[i])
+    i += 1      
 
-for index, value in enumerate(dataset):
-    if index < 3:
-        # print(value)
-        normalized_dataset = normalize_dataset(value)
-
-# Load environment variables from .env file
-env_vars = dotenv_values('.env')
+print(normalized_dataset)
+print(f"Length of normalized dataset is: {len(normalized_dataset)}")  
 
 # Connect to the PostgreSQL database
 conn = psycopg2.connect(
@@ -44,6 +37,7 @@ conn = psycopg2.connect(
 # Open a cursor to perform database operations
 cur = conn.cursor()
 
+# try:
 # # Insert the normalized data into the PostgreSQL table
 for item in normalized_dataset:
     print(item)
@@ -71,3 +65,8 @@ conn.commit()
 # Close the cursor and connection
 cur.close()
 conn.close()
+# except Exception as err:
+#     # print(err)
+#     # Rollback the transaction if an exception occurred
+#     # conn.rollback()
+#     pass
