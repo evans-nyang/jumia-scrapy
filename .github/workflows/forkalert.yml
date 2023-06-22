@@ -1,0 +1,28 @@
+name: Fork Alert
+on:
+  fork
+
+jobs:
+  send-alert:
+    name: Send Alert
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Send Alert
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repoOwner = context.payload.repository.owner.login;
+            const repoName = context.payload.repository.name;
+            const forker = context.payload.sender.login;
+            const alertMessage = `A fork has been created for the repository ${repoOwner}/${repoName} by ${forker}.`;
+
+            github.repos.createCommitComment({
+              owner: repoOwner,
+              repo: repoName,
+              commit_sha: context.payload.head_commit.id,
+              body: alertMessage
+            });
