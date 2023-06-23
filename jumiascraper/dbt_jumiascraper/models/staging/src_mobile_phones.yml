@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: phones
+    description: Mobile phones data from the dbtbase database
+    database: dbtbase
+    schema: public
+    tables:
+      - name: mobile_phones
+        description: >
+          One record per mobile phone
+        columns:
+          - name: data_id
+            description: Primary key of the mobile_phones table
+            tests:
+              - unique
+              - not_null

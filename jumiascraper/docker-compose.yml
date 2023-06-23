@@ -57,8 +57,7 @@ networks:
   phonesjumia:
     name: phonesjumia
     driver: bridge
-    # external: true
 
 volumes:
   pgdata:
-  pglogs: # ${DBT_PROFILES_DIR}
+  pglogs:

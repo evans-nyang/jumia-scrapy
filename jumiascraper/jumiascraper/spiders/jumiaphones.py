@@ -6,12 +6,17 @@ import scrapy
 
 
 class JamSpider(scrapy.Spider):
-    name = "jam"
-    start_urls = ["http://jumia.co.ke/mobile-phones//"]
-    # store scraped items to a json file in dataset directory
-    # custom_settings = {"FEED_FORMAT": "json", "FEED_URI": "../dataset/phones.json"}
+    name = "jumiascraper"
+    start_urls = ["https://jumia.co.ke"]
+    allowed_domains = ["jumia.co.ke"]
+    count = 1
 
     def parse(self, response):
+        url = f"{self.start_urls[0]}/mobile-phones"
+        # settings = get_project_settings()
+        yield scrapy.Request(url=url, callback=self.parse_items)
+    
+    def parse_items(self, response):
         items = JumiascraperItem()
         try:
             print("\nTrying to fetch our articles...")
@@ -21,13 +26,8 @@ class JamSpider(scrapy.Spider):
                 if i < 250:
                     newdata.update({i: self.parse_result(art)})
             items["inform"] = newdata
-            yield newdata
+            yield items
 
-        except Exception as err:
-            print("\nEncountered an exception during execution")
-            raise err
-
-        else:
             next_page = (
                 response.xpath(
                     "/html/body/div[1]/main/div[2]/div[3]/section/div[2]/a[6]"
@@ -35,8 +35,15 @@ class JamSpider(scrapy.Spider):
                 .xpath("@href")
                 .get()
             )
-            if next_page is not None:
-                yield response.follow(next_page, self.parse)
+            if next_page is not None and self.count < 51:
+                url = f"{self.start_urls[0]}{next_page}"
+                self.count += 1
+                print(f"\nGoing to next page {self.count}\n")
+                yield scrapy.Request(url=url, callback=self.parse_items)
+
+        except Exception as err:
+            print("\nEncountered an exception during execution")
+            raise err
 
     def parse_result(self, art) -> dict:
         data = {}

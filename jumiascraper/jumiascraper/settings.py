@@ -1,5 +1,3 @@
-import os
-
 # Scrapy settings for jumiascraper project
 #
 # For simplicity, this file contains only settings considered important or
@@ -90,22 +88,11 @@ ITEM_PIPELINES = {
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
-AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
-s3 = os.environ["S3"]
-drivername = "postgresql"
-user = os.environ["USER"]
-passwd = os.environ["PASSWORD"]
-host = os.environ["LOCALHOST"]
-port = int(os.environ["PORT"])
-db_name = os.environ["DB"]
-
+# Configure the Feed Exports pipeline
 FEEDS = {
-    f"{s3}/%(name)s/%(time)s.json": {
-        "format": "json",
-        "encoding": "utf8",
-        "store_empty": False
+    f"dataset/extracted/%(name)s_%(time)s.json": {
+        'format': 'json',
+        'encoding': 'utf8',
+        'overwrite': True,
     }
 }
-
-DATABASE_STRING = f"{drivername}://{user}:{passwd}@{host}:{port}/{db_name}"

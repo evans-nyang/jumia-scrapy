@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: stg_brands
+    description: This model cleans up brands data
+    columns:
+      - name: brand_hash
+        description: Primary key for stg_brands
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_metas
+    description: This model consolidates metadata
+    columns:
+      - name: url_hash
+        description: Primary key for stg_metas
+        tests:
+          - unique
+          - not_null
+      - name: official_store
+        description: '{{ doc("official_store") }}'
+        tests:
+          - accepted_values:
+              values: ["True", "False"]
+
+  - name: stg_prices
+    description: This model contains phone prices
+    columns:
+      - name: data_hash
+        description: Primary key for stg_prices
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_reviews
+    description: This model contains reviews data
+    columns:
+      - name: votes_hash
+        description: Primary key for stg_reviews
+        tests:
+          - not_null
+
+  - name: stg_products
+    description: This model contains fact data for the data mart
+    columns:
+      - name: dateid_url_hash
+        description: Primary key for stg_products
+        tests:
+          - unique
+          - not_null
+      - name: url_hash
+        description: Foreign key to stg_metas.url_hash
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_metas')
+              field: url_hash
+      - name: data_hash
+        description: Foreign key to stg_prices.data_hash
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_prices')
+              field: data_hash
+      - name: brand_hash
+        description: Foreign key to stg_brands.brand_hash
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_brands')
+              field: brand_hash
+      - name: votes_hash
+        description: Foreign key to stg_reviews.votes_hash
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_reviews')
+              field: votes_hash

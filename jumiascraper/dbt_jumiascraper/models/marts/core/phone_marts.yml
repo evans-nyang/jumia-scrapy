@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: dim_brands
+    description: Dimension table containing distinct brands
+    columns:
+      - name: brand_hash
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_reviews
+    description: Dimension table containing all reviews
+    columns:
+      - name: votes_hash
+        tests:
+          - not_null
+
+  - name: fact_products
+    description: Fact table containing all products
+    columns:
+      - name: date_id
+        tests:
+          - not_null
+      - name: dateid_url_hash
+        tests:
+          - not_null
+      - name: url_hash
+        tests:
+          - not_null
+      - name: brand_hash
+        tests:
+          - relationships:
+              to: ref('dim_brands')
+              field: brand_hash
+      - name: votes_hash
+        tests:
+          - relationships:
+              to: ref('stg_reviews')
+              field: votes_hash
