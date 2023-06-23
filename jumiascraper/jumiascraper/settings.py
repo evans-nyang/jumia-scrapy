@@ -90,7 +90,7 @@ ITEM_PIPELINES = {
 
 # Configure the Feed Exports pipeline
 FEEDS = {
-    f"dataset/%(name)s_%(time)s.json": {
+    f"dataset/extracted/%(name)s_%(time)s.json": {
         'format': 'json',
         'encoding': 'utf8',
         'overwrite': True,
