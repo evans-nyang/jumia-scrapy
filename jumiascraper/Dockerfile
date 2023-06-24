@@ -10,10 +10,10 @@ RUN pip install --upgrade pip setuptools wheel
 COPY requirements.txt .
 RUN pip install --no-cache -r requirements.txt
 
-ADD . .
+COPY . .
 
 # WORKDIR usr/app/jumiascraper
 
 ENV PATH="/app/.local/bin/:${PATH}"
 
-# ENTRYPOINT ["python", "run.py"]
+ENTRYPOINT ["python", "run.py"]
