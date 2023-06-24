@@ -43,6 +43,18 @@ services:
       - "log_statement=all"
       - "-c"
       - "log_destination=stderr"
+
+  jumiascraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jumiascraper
+    volumes:
+      - ./jumiascraper:/usr/app
+    env_file:
+      - .env
+    networks:
+      - phonesjumia
   # pgadmin:
   #   container_name: pgadmin
   #   image: dpage/pgadmin4
