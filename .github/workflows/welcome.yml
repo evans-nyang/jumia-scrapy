@@ -16,25 +16,27 @@ jobs:
         id: check_comments
         run: |
           const { Octokit } = require('@octokit/rest');
+          
+          (async () => {
+            const octokit = new Octokit({
+              auth: process.env.GITHUB_TOKEN
+            });
+      
+            const { owner, repo, number } = context.issue;
+      
+            const { data: comments } = await octokit.issues.listComments({
+              owner,
+              repo,
+              issue_number: number
+            });
+      
+            const commentsCount = comments.length;
+            console.log(`Total comments: ${commentsCount}`);
+            core.setOutput('commentsCount', commentsCount);
+          })();      
 
-          const octokit = new Octokit({
-            auth: process.env.GITHUB_TOKEN
-          });
-
-          const { owner, repo, number } = context.issue;
-
-          const { data: comments } = await octokit.issues.listComments({
-            owner,
-            repo,
-            issue_number: number
-          });
-
-          const commentsCount = comments.length;
-          console.log(`Total comments: ${commentsCount}`);
-          core.setOutput('commentsCount', commentsCount);
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Welcome developer
         if: steps.check_comments.outputs.commentsCount == '0'
