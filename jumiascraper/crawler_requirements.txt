@@ -1,0 +1,8 @@
+Scrapy
+requests
+psycopg[pool,binary]
+psycopg2-binary
+SQLAlchemy
+pandas
+pgcli
+python-dotenv
