@@ -22,7 +22,7 @@ print(f"Length of normalized dataset is: {len(normalized_dataset)}")
 
 # Connect to the PostgreSQL database
 conn = psycopg2.connect(
-    host=os.environ.get('DB_HOST'), 
+    host=os.environ.get('DBT_HOST'), 
     port=int(os.environ.get('DB_PORT')), 
     database=os.environ.get('POSTGRES_DB'), 
     user=os.environ.get('POSTGRES_USER'), 
