@@ -16,7 +16,7 @@ if not (repo_owner and repo_name and issue_number):
     raise ValueError("Missing required environment variables.")
 
 # Get the repository and issue objects
-repo = g.get_repo(f"{repo_owner}/{repo_name}")
+repo = g.get_repo(f"{repo_full_name}")
 issue = repo.get_issue(int(issue_number))
 
 # Get the comments for the issue
