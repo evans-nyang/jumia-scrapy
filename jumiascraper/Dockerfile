@@ -3,16 +3,12 @@ FROM python:3.11.4-slim-bullseye
 USER root
 RUN apt-get update && apt-get install
 
-WORKDIR /usr/app
+RUN pip install pip==23.1.2 setuptools==68.0.0 wheel==0.40.0
 
-RUN pip install --upgrade pip setuptools wheel
+COPY crawler_requirements.txt .
+RUN pip install --no-cache -r crawler_requirements.txt
 
-COPY requirements.txt .
-RUN pip install --no-cache -r requirements.txt
-
-ADD . .
-
-# WORKDIR usr/app/jumiascraper
+COPY . .
 
 ENV PATH="/app/.local/bin/:${PATH}"
 

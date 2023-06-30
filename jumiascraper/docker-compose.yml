@@ -1,23 +1,6 @@
 version: '3.7'
 services:
-  dbt:
-    build:
-      context: ./dbt_jumiascraper
-      dockerfile: Dockerfile.dbt
-      target: dbt-postgres
-    container_name: dbt-jumiascraper
-    volumes:
-      - ./dbt_jumiascraper/.dbt:/root/.dbt
-      - ./dbt_jumiascraper/dbt_project.yml:/usr/app/dbt/dbt_project.yml
-    ports:
-      - ${PORT}:${PORT}
-    env_file:
-      - .env
-    networks:
-      - phonesjumia
-    command: "build"
-
-  postgres:
+  jumiascraperdb:
     image: postgres:15
     container_name: jumiascraperdb
     environment:
@@ -43,15 +26,69 @@ services:
       - "log_statement=all"
       - "-c"
       - "log_destination=stderr"
-  # pgadmin:
-  #   container_name: pgadmin
-  #   image: dpage/pgadmin4
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - phonesjumia
-  #   ports:
-  #     - ${HOSTPORT}:${LOCALPORT}
+
+  sql-executor:
+    image: postgres:15
+    volumes:
+      - ./sql_scripts:/scripts
+    env_file:
+      - .env
+    networks:
+      - phonesjumia
+    links:
+      - jumiascraperdb
+    depends_on:
+      - jumiascraperdb
+    command: sh -c 'sleep 10 && PGPASSWORD=${POSTGRES_PASSWORD} psql -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /scripts/create_tables.sql'
+
+  jumiascraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jumiascraper
+    env_file:
+      - .env
+    networks:
+      - phonesjumia
+    volumes:
+      - ./jumiascraper:/app/jumiascraper
+      - jumiascraper_extracted:/app/dataset/extracted
+    command: >
+      bash -c "python3 run.py && python3 processing/transforming.py && touch /completed"
+    depends_on:
+      sql-executor:
+        condition: service_completed_successfully
+
+  dbt:
+    build:
+      context: ./dbt_jumiascraper
+      dockerfile: Dockerfile.dbt
+      target: dbt-postgres
+    container_name: dbt-jumiascraper
+    volumes:
+      - ./dbt_jumiascraper:/app/dbt_jumiascraper
+      - jumiascraper_extracted:/app/dataset/extracted
+      - jumiascraper_normalized:/app/dataset/normalized
+      - ./processing:/app/processing
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    networks:
+      - phonesjumia
+    command: "build"
+    depends_on:
+      jumiascraper:
+        condition: service_completed_successfully
+    # pgadmin:
+    #   container_name: pgadmin
+    #   image: dpage/pgadmin4
+    #   env_file:
+    #     - .env
+    #   networks:
+    #     - phonesjumia
+    #   ports:
+    #     - ${HOSTPORT}:${LOCALPORT}
 
 networks:
   phonesjumia:
@@ -59,5 +96,7 @@ networks:
     driver: bridge
 
 volumes:
+  jumiascraper_extracted:
+  jumiascraper_normalized:
   pgdata:
   pglogs:

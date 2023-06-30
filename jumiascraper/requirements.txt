@@ -1,11 +1,4 @@
-Scrapy
-requests
-botocore
-pandas
-pgcli
-psycopg[pool,binary]
-psycopg2-binary
-SQLAlchemy
-dbt-core==1.5.1
 dbt-postgres==1.5.1
-astronomer-cosmos==0.6.8
+# botocore
+# dbt-core==1.5.1
+# astronomer-cosmos==0.6.8
