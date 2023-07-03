@@ -29,14 +29,14 @@ proxy AS (
     SELECT
         *
     FROM stg_products
-    JOIN dim_brands using (brand_hash)
-    JOIN dim_reviews using (votes_hash)
-    JOIN dim_prices using (data_hash)
-    JOIN dim_stores using (url_hash)
+    INNER JOIN dim_brands using (brand_hash)
+    INNER JOIN dim_reviews using (votes_hash)
+    INNER JOIN dim_prices using (data_hash)
+    INNER JOIN dim_stores using (url_hash)
 ),
 
 fact_products AS (
-    SELECT
+    SELECT DISTINCT
         date_id,
         url_hash,
         price,
