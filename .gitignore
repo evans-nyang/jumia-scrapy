@@ -148,7 +148,9 @@ variables.tf
 # my files
 impreq.py
 justafile
-*.dbt*
+.dbt*
 airflow/*
 completed
 *secret*
+redis
+dataset
