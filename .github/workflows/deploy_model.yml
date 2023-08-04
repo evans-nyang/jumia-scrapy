@@ -1,0 +1,30 @@
+name: Deploy Model
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: | 
+        pip install -r ml/ml_requirements.txt
+
+    - name: Deploy model
+      env:
+        DB_URI: ${{ secrets.DB_URI }}
+        # API_KEY: ${{ secrets.API_KEY }}
+      run: |
+        python ml/logistic_regression.py
