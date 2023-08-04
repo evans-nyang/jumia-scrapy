@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile.superset
+    container_name: superset
+    env_file:
+      - .env
+    ports:
+      - ${SUPERSET_PORT}:${SUPERSET_PORT}
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    # volumes:
+    #   - ./superset_config.py:/app/superset_config.py
+    #   - ./superset_setup.sh:/app/superset_setup.sh
+    networks:
+      - phonesjumia
+    command: bash superset_setup.sh
+
+networks:
+  phonesjumia: 
+    external: true

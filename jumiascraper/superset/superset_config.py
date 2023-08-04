@@ -2,16 +2,18 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-load_dotenv(dotenv_path)
+# dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv()
 
 # FLASK_DEBUG = True
 #---------------------------------------------------------
 # Superset specific config
 #---------------------------------------------------------
+ROW_LIMIT = 5000
+
 # Redis cache
 REDIS_HOST = os.environ.get('REDIS_HOST')
-REDIS_PORT = os.environ.get('REDIS_PORT2')
+REDIS_PORT = os.environ.get('REDIS_PORT')
 
 CACHE_CONFIG = {
     'CACHE_TYPE': 'redis',
@@ -22,7 +24,7 @@ CACHE_CONFIG = {
 
 # Database connection
 POSTGRES_HOST = os.environ.get('POSTGRES_HOST') 
-POSTGRES_PORT = int(os.environ.get('DB_PORT3')) 
+POSTGRES_PORT = int(os.environ.get('DB_PORT')) 
 POSTGRES_DB = os.environ.get('POSTGRES_DB') 
 POSTGRES_USER = os.environ.get('POSTGRES_USER')
 POSTGRES_PASSWORD =os.environ.get('POSTGRES_PASSWORD')
@@ -36,10 +38,14 @@ SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASS
 # Flask App Builder configuration
 #---------------------------------------------------------
 # Your App secret key
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY') 
 
 # Flask-WTF flag for CSRF
-# WTF_CSRF_ENABLED = True
+WTF_CSRF_ENABLED = True
+# Add endpoints that need to be exempt from CSRF protection
+WTF_CSRF_EXEMPT_LIST = []
+# A CSRF token that expires in 1 year
+WTF_CSRF_TIME_LIMIT = 60 * 60 * 24 * 365
 
 # Set this API key to enable Mapbox visualizations
 # MAPBOX_API_KEY = os.environ.get('MAPBOX_API_KEY')

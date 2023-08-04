@@ -10,18 +10,9 @@ RUN pip install sqlparse==0.4.3 apache-superset==2.1.0 psycopg2 psycopg2-binary 
 USER superset
 
 # Set the working directory
-WORKDIR /app/superset
+WORKDIR /app
 
 # Copy all files from the current directory to the container's working directory
 COPY . .
 
-# If we want to use our custom logo. Also, it has to be set in superset_config.py
-#COPY XYZ.png /app/superset/static/assets/images/
-
-ENV SUPERSET_CONFIG_PATH /app/superset/superset_config.py
-
-WORKDIR /app
-
-# RUN /bin/bash -c "source /app/superset/superset_setup.sh"
-
-# CMD ["bash", "/app/superset/superset_setup.sh"]
+ENV SUPERSET_CONFIG_PATH /app/superset_config.py
