@@ -3,7 +3,7 @@ import psycopg2
 from dotenv import load_dotenv
 from normalization import normalize_dataset
 from file_reader import load_dataset_from_json
-from pandas_processor import process_data
+# from pandas_processor import process_data
 
 # Load environment variables from .env file
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
@@ -18,7 +18,7 @@ dataset = load_dataset_from_json(file_path)
 # Normalize the dataset
 normalized_dataset = normalize_dataset(dataset)
 
-print(f"Length of normalized dataset is: {len(normalized_dataset)}")  
+# print(f"Length of normalized dataset is: {len(normalized_dataset)}")  
 
 # Connect to the PostgreSQL database
 conn = psycopg2.connect(

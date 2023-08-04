@@ -1,0 +1,51 @@
+# Top level build args
+ARG build_for=linux/amd64
+
+##
+# base image (abstract)
+##
+FROM --platform=$build_for python:3.11.2-slim-bullseye as base
+
+# System setup
+RUN apt-get update --fix-missing \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    ssh-client \
+    software-properties-common \
+    make \
+    ca-certificates \
+    libpq-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Env vars
+ENV PYTHONIOENCODING=utf-8
+ENV LANG=C.UTF-8
+
+# Update python
+RUN python -m pip install --upgrade --no-cache-dir pip setuptools wheel
+
+# Set docker basics
+WORKDIR /usr/app/dbt/
+
+# Create .dbt directory and copy profiles.yml
+RUN mkdir -p /root/.dbt
+COPY .dbt/profiles.yml /root/.dbt/profiles.yml
+
+COPY . /usr/app/dbt/
+
+# Install dbt
+RUN pip install dbt-core
+
+# Run dbt deps before dbt run
+RUN dbt deps
+
+VOLUME /usr/app
+ENTRYPOINT ["dbt"]
+
+# dbt-postgres
+FROM base as dbt-postgres
+ARG dbt_postgres_ref=dbt-core@v1.6.0b2
+RUN python -m pip install --no-cache-dir "git+https://github.com/dbt-labs/${dbt_postgres_ref}#egg=dbt-postgres&subdirectory=plugins/postgres"

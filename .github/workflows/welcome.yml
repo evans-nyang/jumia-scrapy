@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.11"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,17 +28,17 @@ jobs:
         run: |
           echo "::set-output name=issueNumber::${{ github.event.pull_request.number }}"
 
-      - name: Check PR comment history
-        id: check_comments
-        run: python .github/scripts/comment_script.py
+      - name: Check contribution history
+        id: check_contribution
+        run: python .github/scripts/contribution_check.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_EVENT_ISSUE_NUMBER: ${{ steps.get_issue_number.outputs.issueNumber }}
 
-      - name: Welcome developer
-        if: steps.check_comments.outputs.commentsCount == '0'
+      - name: Welcome contributor
+        if: steps.check_contribution.outputs.isContributor == false
         run: gh pr comment $PR_URL --body "Welcome! Your contribution is appreciated."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

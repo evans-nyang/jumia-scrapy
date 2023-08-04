@@ -1,6 +1,6 @@
 # Terraform
 
-This README provides an overview of the Terraform template included in this repository. The template creates an AWS S3 bucket with versioning enabled and sets its ACL to private.
+This Terraform template creates an AWS S3 bucket with versioning enabled and sets its ACL to private.
 
 ## Resource Configuration
 
@@ -15,7 +15,7 @@ The Terraform configuration file (`main.tf`) defines the AWS resources required 
 1. Change directory to terraform_s3
 
     ```bash
-    cd terraform_s3/terraform
+    cd terraform
     ```
 
 2. Create a new file `variables.tf` in same directory as main.tf, use var_example file as template.

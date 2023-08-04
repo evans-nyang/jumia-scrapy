@@ -1,5 +1,16 @@
 version: '3.7'
 services:
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - ./redis:/data
+    networks:
+      - phonesjumia
+
   jumiascraperdb:
     image: postgres:15
     container_name: jumiascraperdb
@@ -26,20 +37,20 @@ services:
       - "log_statement=all"
       - "-c"
       - "log_destination=stderr"
-
-  sql-executor:
-    image: postgres:15
-    volumes:
-      - ./sql_scripts:/scripts
-    env_file:
-      - .env
-    networks:
-      - phonesjumia
-    links:
-      - jumiascraperdb
-    depends_on:
-      - jumiascraperdb
-    command: sh -c 'sleep 10 && PGPASSWORD=${POSTGRES_PASSWORD} psql -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /scripts/create_tables.sql'
+      
+  # sql-executor:
+  #   image: postgres:15
+  #   volumes:
+  #     - ./sql_scripts:/scripts
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - phonesjumia
+  #   links:
+  #     - jumiascraperdb
+  #   depends_on:
+  #     - jumiascraperdb
+  #   command: sh -c 'sleep 10 && PGPASSWORD=${POSTGRES_PASSWORD} psql -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /scripts/create_tables.sql'
 
   jumiascraper:
     build:
@@ -54,10 +65,10 @@ services:
       - ./jumiascraper:/app/jumiascraper
       - jumiascraper_extracted:/app/dataset/extracted
     command: >
-      bash -c "python3 run.py && python3 processing/transforming.py && touch /completed"
-    depends_on:
-      sql-executor:
-        condition: service_completed_successfully
+      bash -c "python3 run.py && python3 processing/ingestion.py && touch /completed"
+    # depends_on:
+    #   sql-executor:
+    #     condition: service_completed_successfully
 
   dbt:
     build:
@@ -78,17 +89,20 @@ services:
       - phonesjumia
     command: "build"
     depends_on:
+      jumiascraperdb:
+        condition: service_completed_successfully
       jumiascraper:
         condition: service_completed_successfully
-    # pgadmin:
-    #   container_name: pgadmin
-    #   image: dpage/pgadmin4
-    #   env_file:
-    #     - .env
-    #   networks:
-    #     - phonesjumia
-    #   ports:
-    #     - ${HOSTPORT}:${LOCALPORT}
+      # - sql-executor
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - phonesjumia
+  #   ports:
+  #     - ${HOSTPORT}:${LOCALPORT}
 
 networks:
   phonesjumia:

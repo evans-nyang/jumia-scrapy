@@ -1,0 +1,18 @@
+
+FROM apache/superset
+
+# Switching to root to install the required packages
+USER root
+
+RUN pip install sqlparse==0.4.3 apache-superset==2.1.0 psycopg2 psycopg2-binary marshmallow_enum
+
+# Switching back to using the `superset` user
+USER superset
+
+# Set the working directory
+WORKDIR /app
+
+# Copy all files from the current directory to the container's working directory
+COPY . .
+
+ENV SUPERSET_CONFIG_PATH /app/superset_config.py

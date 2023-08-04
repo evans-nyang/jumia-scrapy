@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS mobile_phones;
-
 CREATE TABLE mobile_phones (
     crawled_at TIMESTAMP,
     item_url TEXT,
